@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraDocs - Intelligent Document Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">NeuraDocs</div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-page="home">Home</a>
+            <a href="#" class="nav-link" data-page="chat">Chat</a>
+            <a href="#" class="nav-link" data-page="summary">Summary</a>
+            <a href="#" class="nav-link" data-page="voice">Voice</a>
+        </div>
+    </nav>
+
+    <!-- Bubbles Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- ===== HOME PAGE ===== -->
+    <div class="page active" id="page-home">
+        <div class="card">
+            <h1 class="hero-title">NeuraDocs</h1>
+            <p class="hero-tagline">"Turn your documents into insights!"</p>
+            <p class="hero-sub">Upload your document to begin</p>
+
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                <div id="fileName" class="file-name" style="display:none;">
+                    <span id="fileNameText"></span>
+                    <button class="file-remove-btn" onclick="removeFile()" aria-label="Remove file" title="Remove file">&times;</button>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" id="uploadBtn" onclick="uploadFile()">Upload</button>
+
+            <div class="privacy-notice">
+                ⚠️ All uploaded and generated files are automatically deleted within 10 minutes for your privacy.
+            </div>
+
+            <div id="uploadStatus" class="status-msg" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- ===== CHAT PAGE ===== -->
+    <div class="page" id="page-chat">
+        <div class="card card-chat">
+            <div class="doc-label" id="chatDocLabel">No document uploaded</div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty-state">Upload a document and start asking questions!</div>
+            </div>
+
+            <div class="chat-input-row">
+                <div class="input-wrap">
+                    <input type="text" id="chatInput" class="input-field" placeholder="Ask something..."
+                           onkeydown="if(event.key==='Enter') sendChat()">
+                    <button class="input-clear-btn" onclick="clearInput('chatInput')" aria-label="Clear" title="Clear">&times;</button>
+                </div>
+                <button class="btn btn-accent" onclick="sendChat()">Ask</button>
+            </div>
+
+            <div style="text-align:center; margin-top:12px;">
+                <button class="btn btn-primary" onclick="downloadChat()">Download Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SUMMARY PAGE ===== -->
+    <div class="page" id="page-summary">
+        <div class="card">
+            <h2 class="section-title">Document Summary</h2>
+
+            <div class="summary-tabs">
+                <button class="tab-btn active" data-level="concise" onclick="selectTab(this, 'concise')">Concise</button>
+                <button class="tab-btn" data-level="standard" onclick="selectTab(this, 'standard')">Standard</button>
+                <button class="tab-btn" data-level="detailed" onclick="selectTab(this, 'detailed')">Detailed</button>
+            </div>
+
+            <div class="summary-box" id="summaryBox">
+                <div class="empty-state">Upload a document and select a summary level to begin.</div>
+            </div>
+
+            <div style="text-align:center; margin-top:16px;">
+                <button class="btn btn-primary" onclick="downloadSummary()">Download Summary</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== VOICE PAGE ===== -->
+    <div class="page" id="page-voice">
+        <div class="card">
+            <h2 class="section-title">Voice Assistant</h2>
+
+            <div class="mic-container">
+                <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="voice-input-row">
+                <div class="input-wrap">
+                    <input type="text" id="voiceTranscript" class="input-field" placeholder="Your speech will appear here...">
+                    <button class="input-clear-btn" onclick="clearInput('voiceTranscript')" aria-label="Clear" title="Clear">&times;</button>
+                </div>
+                <button class="btn btn-accent" onclick="sendVoice()">Ask</button>
+            </div>
+
+            <div class="voice-messages" id="voiceMessages"></div>
+
+            <div class="voice-actions">
+                <button class="btn btn-outline" onclick="clearVoiceChat()">Clear Chat</button>
+                <button class="btn btn-primary" onclick="downloadVoice()">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
