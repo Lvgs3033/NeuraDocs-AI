@@ -310,7 +310,8 @@ def doc_info():
         })
     return jsonify({'uploaded': False})
 
+os.makedirs('uploads', exist_ok=True)
+os.makedirs('generated', exist_ok=True)
+
 if __name__ == '__main__':
-    os.makedirs('uploads', exist_ok=True)
-    os.makedirs('generated', exist_ok=True)
     app.run(debug=True, port=5000)
