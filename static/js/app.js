@@ -116,6 +116,7 @@ async function uploadFile() {
             showStatus(data.error || 'Upload failed.', 'error');
         }
     } catch (err) {
+        console.error("Upload Error:", err);
         showStatus('Network error. Please try again.', 'error');
     }
 
@@ -237,8 +238,9 @@ async function sendChat() {
             await appendChatMsgAnimated('ai', data.error || 'Something went wrong.');
         }
     } catch (err) {
-        removeChatLoading(loadingId);
-        await appendChatMsgAnimated('ai', 'Network error. Please try again.');
+    console.error("Chat Error:", err);
+    removeChatLoading(loadingId);
+    await appendChatMsgAnimated('ai', 'Network error. Please try again.');
     }
 }
 
@@ -435,11 +437,19 @@ async function sendVoice() {
 
     try {
         const res = await fetch('/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question })
         });
-        const data = await res.json();
+
+        console.log("Status:", res.status);
+
+if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(txt);
+}
+
+const data = await res.json();
 
         if (data.answer) {
             await appendVoiceMsgAnimated('ai', data.answer);
