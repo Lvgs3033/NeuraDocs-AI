@@ -39,11 +39,23 @@
 
             <button class="btn btn-primary btn-full" id="uploadBtn" onclick="uploadFile()">Upload</button>
 
+            <button class="btn btn-primary btn-full" id="proceedBtn" onclick="goToChat()" style="display:none; margin-top:10px;">Proceed &rarr;</button>
+
             <div class="privacy-notice">
                 ⚠️ All uploaded and generated files are automatically deleted within 10 minutes for your privacy.
             </div>
 
             <div id="uploadStatus" class="status-msg" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Upload Success Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-box">
+            <div class="modal-icon">&#10003;</div>
+            <div class="modal-title">Upload Successful!</div>
+            <div class="modal-sub" id="modalFileName">Your document is ready.</div>
+            <button class="btn btn-primary btn-full" onclick="goToChat()">OK</button>
         </div>
     </div>
 
@@ -65,7 +77,8 @@
                 <button class="btn btn-accent" onclick="sendChat()">Ask</button>
             </div>
 
-            <div style="text-align:center; margin-top:12px;">
+            <div style="text-align:center; margin-top:12px;" class="chat-actions">
+                <button class="btn btn-outline" onclick="clearAllChat()">Clear All Chat</button>
                 <button class="btn btn-primary" onclick="downloadChat()">Download Chat</button>
             </div>
         </div>

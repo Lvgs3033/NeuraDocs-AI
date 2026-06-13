@@ -4,7 +4,8 @@
     const colors = ['#06b6d4', '#38bdf8', '#a78bfa', '#f472b6', '#67e8f9', '#34d399', '#fbbf24', '#fb7185', '#818cf8'];
     for (let i = 0; i < 35; i++) {
         const bubble = document.createElement('div');
-        bubble.className = 'bubble';
+        // Use 'bg-bubble' class so it never conflicts with chat bubble class
+        bubble.className = 'bg-bubble';
         const size = Math.random() * 100 + 15;
         const color = colors[Math.floor(Math.random() * colors.length)];
         bubble.style.cssText = `
@@ -110,13 +111,24 @@ async function uploadFile() {
             uploadedFilename = data.filename;
             showStatus(`✓ "${data.filename}" uploaded successfully!`, 'success');
             updateDocLabels(data.filename);
+
+            // Clear previous chat and summary on new upload
+            resetChat();
+            resetSummary();
+
+            // Show success popup
+            document.getElementById('modalFileName').textContent = `"${data.filename}" is ready to use.`;
+            document.getElementById('uploadModal').classList.add('show');
+
+            // Show proceed button on upload page too
+            document.getElementById('proceedBtn').style.display = 'block';
+
             // Auto-load standard summary
             fetchSummary('concise');
         } else {
             showStatus(data.error || 'Upload failed.', 'error');
         }
     } catch (err) {
-        console.error("Upload Error:", err);
         showStatus('Network error. Please try again.', 'error');
     }
 
@@ -157,6 +169,29 @@ function clearInput(id) {
     el.focus();
 }
 
+// ===== Modal / Navigation helpers =====
+function goToChat() {
+    document.getElementById('uploadModal').classList.remove('show');
+    const chatLink = document.querySelector('.nav-link[data-page="chat"]');
+    chatLink.click();
+}
+
+function resetChat() {
+    chatHistory = [];
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '<div class="empty-state">Upload a document and start asking questions!</div>';
+}
+
+function resetSummary() {
+    currentSummary = '';
+    const box = document.getElementById('summaryBox');
+    box.innerHTML = '<div class="empty-state">Upload a document and select a summary level to begin.</div>';
+}
+
+function clearAllChat() {
+    resetChat();
+}
+
 // ===== Typewriter text animation =====
 function typewriterEffect(el, text, speed = 18) {
     return new Promise((resolve) => {
@@ -168,8 +203,6 @@ function typewriterEffect(el, text, speed = 18) {
         el.innerHTML = '';
         el.appendChild(cursor);
 
-        // Use a temporary container to type character by character
-        // while keeping <br> tags intact
         const tokens = tokenizeHtml(formatted);
 
         function step() {
@@ -238,9 +271,8 @@ async function sendChat() {
             await appendChatMsgAnimated('ai', data.error || 'Something went wrong.');
         }
     } catch (err) {
-    console.error("Chat Error:", err);
-    removeChatLoading(loadingId);
-    await appendChatMsgAnimated('ai', 'Network error. Please try again.');
+        removeChatLoading(loadingId);
+        await appendChatMsgAnimated('ai', 'Network error. Please try again.');
     }
 }
 
@@ -251,7 +283,8 @@ function appendChatMsg(role, text) {
 
     const div = document.createElement('div');
     div.className = role === 'user' ? 'msg-user' : 'msg-ai';
-    div.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
+    // Use 'chat-bubble' class — never 'bubble' (that conflicts with background bubble CSS)
+    div.innerHTML = `<div class="chat-bubble">${escapeHtml(text)}</div>`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
@@ -265,7 +298,8 @@ async function appendChatMsgAnimated(role, text) {
     const div = document.createElement('div');
     div.className = role === 'user' ? 'msg-user' : 'msg-ai';
     const bubble = document.createElement('div');
-    bubble.className = 'bubble';
+    // Use 'chat-bubble' class — never 'bubble' (that conflicts with background bubble CSS)
+    bubble.className = 'chat-bubble';
     div.appendChild(bubble);
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
@@ -283,7 +317,8 @@ function appendChatLoading() {
     const div = document.createElement('div');
     div.className = 'msg-ai msg-loading';
     div.id = id;
-    div.innerHTML = `<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+    // Use 'chat-bubble' class — never 'bubble'
+    div.innerHTML = `<div class="chat-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
     return id;
@@ -437,19 +472,11 @@ async function sendVoice() {
 
     try {
         const res = await fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question })
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question })
         });
-
-        console.log("Status:", res.status);
-
-if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(txt);
-}
-
-const data = await res.json();
+        const data = await res.json();
 
         if (data.answer) {
             await appendVoiceMsgAnimated('ai', data.answer);

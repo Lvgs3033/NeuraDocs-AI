@@ -30,7 +30,9 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Floating Bubbles Background - transparent, sits above gradient */
+/* =============================================
+   FLOATING BUBBLES BACKGROUND
+   ============================================= */
 .stars {
     position: fixed;
     top: 0; left: 0;
@@ -41,7 +43,8 @@ html, body {
     background: transparent;
 }
 
-.bubble {
+/* Background decorative bubbles only */
+.stars .bg-bubble {
     position: absolute;
     bottom: -150px;
     border-radius: 50%;
@@ -51,12 +54,14 @@ html, body {
     box-shadow:
         inset 0 0 12px var(--bubble-color, var(--accent-light)),
         0 0 18px var(--bubble-color, var(--accent-light));
-    backdrop-filter: blur(1px);
     animation: floatUp var(--dur, 18s) linear infinite;
     animation-delay: var(--delay, 0s);
+    z-index: 0;
+    pointer-events: none;
 }
 
-.bubble::after {
+/* Shine effect ONLY on background bubbles */
+.stars .bg-bubble::after {
     content: '';
     position: absolute;
     top: 12%;
@@ -84,7 +89,9 @@ html, body {
     }
 }
 
-/* Navbar / Header */
+/* =============================================
+   NAVBAR
+   ============================================= */
 .navbar {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -154,7 +161,9 @@ html, body {
     box-shadow: 0 2px 12px rgba(56, 189, 248, 0.4);
 }
 
-/* Pages */
+/* =============================================
+   PAGES
+   ============================================= */
 .page {
     display: none;
     position: relative;
@@ -169,7 +178,9 @@ html, body {
     display: flex;
 }
 
-/* Card */
+/* =============================================
+   CARD
+   ============================================= */
 .card {
     background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card2) 100%);
     border: 1px solid var(--border);
@@ -179,6 +190,7 @@ html, body {
     max-width: 560px;
     box-shadow: 0 0 60px rgba(56, 189, 248, 0.1), 0 20px 60px rgba(0,0,0,0.5);
     position: relative;
+    z-index: 2;
 }
 
 .card-chat {
@@ -188,7 +200,9 @@ html, body {
     flex-direction: column;
 }
 
-/* Hero */
+/* =============================================
+   HERO
+   ============================================= */
 .hero-title {
     text-align: center;
     font-size: 38px;
@@ -216,7 +230,9 @@ html, body {
     margin-bottom: 28px;
 }
 
-/* Upload area */
+/* =============================================
+   UPLOAD AREA
+   ============================================= */
 .upload-area {
     display: flex;
     flex-direction: column;
@@ -266,7 +282,9 @@ html, body {
     color: white;
 }
 
-/* Buttons */
+/* =============================================
+   BUTTONS
+   ============================================= */
 .btn {
     border: none;
     cursor: pointer;
@@ -317,7 +335,15 @@ html, body {
     width: 100%;
 }
 
-/* Privacy notice */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* =============================================
+   PRIVACY NOTICE & STATUS
+   ============================================= */
 .privacy-notice {
     background: rgba(245, 158, 11, 0.1);
     border: 1px solid rgba(245, 158, 11, 0.3);
@@ -350,7 +376,9 @@ html, body {
     color: #fca5a5;
 }
 
-/* Doc label */
+/* =============================================
+   DOC LABEL
+   ============================================= */
 .doc-label {
     font-size: 14px;
     color: var(--text-secondary);
@@ -362,7 +390,9 @@ html, body {
     border: 1px solid var(--border);
 }
 
-/* Chat messages */
+/* =============================================
+   CHAT MESSAGES
+   ============================================= */
 .chat-messages {
     flex: 1;
     min-height: 260px;
@@ -372,11 +402,11 @@ html, body {
     margin-bottom: 16px;
     scrollbar-width: thin;
     scrollbar-color: var(--accent) transparent;
+    position: relative;
+    z-index: 2;
 }
 
-.chat-messages::-webkit-scrollbar {
-    width: 4px;
-}
+.chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
 .chat-messages::-webkit-scrollbar-thumb {
     background: var(--accent);
@@ -390,50 +420,46 @@ html, body {
     padding: 40px 20px;
 }
 
+/* ---- User message ---- */
 .msg-user {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
 }
 
-.msg-user .bubble {
+.msg-user .chat-bubble {
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
-    color: white;
+    color: #ffffff;
     padding: 10px 16px;
     border-radius: 16px 16px 4px 16px;
     max-width: 75%;
     font-size: 14px;
     line-height: 1.5;
-    border: none;
-    box-shadow: none;
-    backdrop-filter: none;
-    position: static;
-    animation: none;
+    box-shadow: 0 2px 12px rgba(6, 182, 212, 0.25);
 }
 
+/* ---- AI message ---- */
 .msg-ai {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
 }
 
-.msg-ai .bubble {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
+.msg-ai .chat-bubble {
+    background: #ffffff;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    color: #111111 !important;
     padding: 12px 16px;
     border-radius: 16px 16px 16px 4px;
     max-width: 85%;
     font-size: 14px;
     line-height: 1.6;
-    box-shadow: none;
-    backdrop-filter: none;
-    position: static;
-    animation: none;
+    font-weight: 400;
 }
 
-.msg-loading .bubble {
-    opacity: 0.6;
+/* Loading dots */
+.msg-loading .chat-bubble {
+    opacity: 0.7;
 }
 
 .typing-dots {
@@ -456,12 +482,12 @@ html, body {
     40% { transform: scale(1.2); opacity: 1; }
 }
 
-/* Streaming text cursor animation */
+/* Streaming cursor */
 .stream-cursor {
     display: inline-block;
     width: 2px;
     height: 1em;
-    background: var(--accent-bright);
+    background: var(--accent);
     vertical-align: text-bottom;
     margin-left: 2px;
     animation: blinkCursor 0.8s step-end infinite;
@@ -472,7 +498,9 @@ html, body {
     51%, 100% { opacity: 0; }
 }
 
-/* Chat input */
+/* =============================================
+   CHAT INPUT
+   ============================================= */
 .chat-input-row,
 .voice-input-row {
     display: flex;
@@ -531,7 +559,20 @@ html, body {
     color: white;
 }
 
-/* Summary */
+/* =============================================
+   CHAT ACTIONS
+   ============================================= */
+.chat-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+/* =============================================
+   SUMMARY PAGE
+   ============================================= */
 .section-title {
     text-align: center;
     font-size: 24px;
@@ -585,7 +626,9 @@ html, body {
     color: var(--text-primary);
 }
 
-/* Voice */
+/* =============================================
+   VOICE PAGE
+   ============================================= */
 .mic-container {
     display: flex;
     justify-content: center;
@@ -656,14 +699,15 @@ html, body {
 
 .voice-msg-ai div {
     display: inline-block;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
+    background: #ffffff;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    color: #111111 !important;
     padding: 10px 14px;
     border-radius: 12px 12px 12px 4px;
     font-size: 13px;
     line-height: 1.6;
     max-width: 90%;
+    font-weight: 400;
 }
 
 .voice-actions {
@@ -674,7 +718,9 @@ html, body {
     flex-wrap: wrap;
 }
 
-/* Loading spinner */
+/* =============================================
+   SPINNER
+   ============================================= */
 .spinner {
     width: 18px; height: 18px;
     border: 2px solid rgba(255,255,255,0.2);
@@ -688,22 +734,83 @@ html, body {
     to { transform: rotate(360deg); }
 }
 
-/* Disabled state */
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
+/* =============================================
+   MODAL
+   ============================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(5, 9, 20, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
 }
 
-/* Responsive */
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 36px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 0 60px rgba(56, 189, 248, 0.15), 0 20px 60px rgba(0,0,0,0.5);
+    transform: translateY(-10px) scale(0.96);
+    transition: transform 0.25s ease;
+}
+
+.modal-overlay.show .modal-box {
+    transform: translateY(0) scale(1);
+}
+
+.modal-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--success) 0%, var(--accent) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.45);
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.modal-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    word-break: break-word;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
 @media (max-width: 600px) {
-    .card {
-        padding: 24px 20px;
-    }
+    .card { padding: 24px 20px; }
     .hero-title { font-size: 28px; }
     .navbar { padding: 12px 16px; }
     .nav-links { gap: 4px; }
     .nav-link { padding: 5px 10px; font-size: 13px; }
     .summary-tabs { flex-wrap: wrap; }
     .voice-actions { flex-direction: column; }
+    .chat-actions { flex-direction: column; }
 }
