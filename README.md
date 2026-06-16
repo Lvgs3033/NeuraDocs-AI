@@ -21,25 +21,12 @@ Python | Flask | HTML | CSS | JavaScript | Google Gemini API | PyPDF2 | ReportLa
 pip install -r requirements.txt
 ```
 
-### 2. Set your Google Gemini API key
-Get a free API key from https://aihub.google.com/
-
-**Linux/Mac:**
-```bash
-export GEMINI_API_KEY=your_api_key_here
-```
-
-**Windows:**
-```cmd
-set GEMINI_API_KEY=your_api_key_here
-```
-
-### 3. Run the application
+### 2. Run the application
 ```bash
 python app.py
 ```
 
-### 4. Open in browser
+### 3. Open in browser
 Navigate to: http://localhost:5000
 
 ## Usage
