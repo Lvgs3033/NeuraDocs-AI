@@ -36,8 +36,6 @@ Navigate to: http://localhost:5000
 3. **Summary** – Get Concise / Standard / Detailed summaries
 4. **Voice** – Click the microphone and speak your question
 
-> **Note:** Without a Gemini API key, the app runs in demo mode with placeholder responses.
-
 ## Privacy
 
 All uploaded and generated files are automatically deleted within 10 minutes.
